@@ -1,0 +1,229 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    
+    <changeSet author="fastcode" id="0000000000001">
+        <createTable tableName="permission">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="permission_pkey"/>
+            </column>
+            <column name="display_name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createSequence cacheSize="1" 
+        	cycle="false" dataType="bigint" 
+         	incrementBy="1" 
+         	maxValue="9223372036854775807" 
+         	minValue="1" 
+         	sequenceName="permission_id_sequence" 
+         	startValue="1"/>
+         <addUniqueConstraint columnNames="name" 
+        	constraintName="uk_permission_name" 
+        	tableName="permission"/>
+        
+    </changeSet>
+    <changeSet author="fastcode" id="0000000000002">
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="role_pkey"/>
+            </column>
+            <column name="display_name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createSequence cacheSize="1" 
+        	cycle="false" dataType="bigint" 
+         	incrementBy="1" 
+         	maxValue="9223372036854775807" 
+         	minValue="1" 
+         	sequenceName="role_id_sequence" 
+         	startValue="1"/>
+         <addUniqueConstraint columnNames="name" 
+        	constraintName="uk_role_name" 
+        	tableName="role"/>
+    </changeSet>
+   
+    <changeSet author="fastcode" id="0000000000003">
+        <createTable tableName="rolepermission">
+            <column name="permission_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="rolepermission_pkey"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="rolepermission_pkey"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="permission_id"
+         	baseTableName="rolepermission" 
+         	constraintName="fk_rolepermission_permission_id" 
+         	deferrable="false" 
+         	initiallyDeferred="false"
+         	onDelete="NO ACTION" 
+         	onUpdate="NO ACTION" 
+         	referencedColumnNames="id"
+         	referencedTableName="permission" 
+         	validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="role_id"
+         	baseTableName="rolepermission" 
+         	constraintName="fk_rolepermission_role_id"
+          	deferrable="false" 
+          	initiallyDeferred="false" 
+          	onDelete="NO ACTION" 
+          	onUpdate="NO ACTION" 
+          	referencedColumnNames="id" 
+          	referencedTableName="role" 
+          	validate="true"/>
+        
+    </changeSet>
+    
+    <changeSet author="fastcode" id="0000000000004">
+        <createTable tableName="f_user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="f_user_pkey"/>
+            </column>
+            <column name="access_failed_count" type="INTEGER"/>
+            <column name="authentication_source" type="VARCHAR(64)"/>
+            <column name="email_address" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email_confirmation_code" type="VARCHAR(328)"/>
+            <column name="first_name" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_email_confirmed" type="BOOLEAN"/>
+            <column name="is_lockout_enabled" type="BOOLEAN"/>
+            <column name="is_phone_number_confirmed" type="VARCHAR(255)"/>
+            <column name="two_factor_enabled" type="BOOLEAN"/>
+            <column name="last_login_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="last_name" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lockout_end_date_utc" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="password" type="VARCHAR(128)"/>
+            <column name="password_reset_code" type="VARCHAR(328)"/>
+            <column name="phone_number" type="VARCHAR(32)"/>
+            <column name="profile_picture_id" type="BIGINT"/>
+            <column name="user_name" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createSequence cacheSize="1" 
+        	cycle="false" dataType="bigint" 
+         	incrementBy="1" 
+         	maxValue="9223372036854775807" 
+         	minValue="1" 
+         	sequenceName="f_user_id_sequence" 
+         	startValue="1"/>
+         	
+        <addUniqueConstraint columnNames="user_name" 
+        constraintName="uk_user_name" 
+        tableName="f_user"/>
+    </changeSet>
+    
+    <changeSet author="fastcode" id="0000000000005">
+        <createTable tableName="userrole">
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="userrole_pkey"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="userrole_pkey"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id" 
+        baseTableName="userrole" 
+        constraintName="fk_userrole_user_id" 
+        deferrable="false" initiallyDeferred="false" 
+        onDelete="NO ACTION" onUpdate="NO ACTION" 
+        referencedColumnNames="id" 
+        referencedTableName="f_user" 
+        validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="role_id" 
+        baseTableName="userrole"
+         constraintName="fk_userrole_role_id" 
+         deferrable="false" initiallyDeferred="false" 
+         onDelete="NO ACTION" onUpdate="NO ACTION" 
+         referencedColumnNames="id" 
+         referencedTableName="role"
+         validate="true"/>
+    </changeSet>
+    
+    <changeSet author="fastcode" id="0000000000006">
+        <createTable tableName="userpermission">
+            <column name="permission_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="userpermission_pkey"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="userpermission_pkey"/>
+            </column>
+            <column name="revoked" type="BOOLEAN"/>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="user_id" 
+        baseTableName="userpermission" 
+        constraintName="fk_userpermission_user_id" 
+        deferrable="false" initiallyDeferred="false" 
+        onDelete="NO ACTION" onUpdate="NO ACTION" 
+        referencedColumnNames="id" 
+        referencedTableName="f_user" 
+        validate="true"/>
+
+        <addForeignKeyConstraint baseColumnNames="permission_id" 
+        baseTableName="userpermission" 
+        constraintName="fk_userpermission_permission_id" deferrable="false"
+         initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" 
+         referencedColumnNames="id" referencedTableName="permission" validate="true"/>
+    </changeSet>
+ 
+    <!--  Email tables -->
+   <changeSet author="fastcode" id="0000000000007">
+        <createTable tableName="email">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="email_pkey"/>
+            </column>
+            <column name="active" type="BOOLEAN"/>
+            <column name="attachmentpath" type="VARCHAR(256)"/>
+            <column name="bcc" type="VARCHAR(256)"/>
+            <column name="category" type="VARCHAR(256)"/>
+            <column name="cc" type="VARCHAR(256)"/>
+            <column name="content_html" type="VARCHAR(32768)"/>
+            <column name="content_json" type="VARCHAR(32768)"/>
+            <column name="subject" type="VARCHAR(256)"/>
+            <column name="template_name" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to_" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rt" type="VARCHAR(12)"/>
+        </createTable>
+    </changeSet>
+    
+	<changeSet author="fastcode" id="0000000000008">
+        <createTable tableName="email_variable">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="email_variable_pkey"/>
+            </column>
+            <column name="default_value" type="VARCHAR(100)"/>
+            <column name="property_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="property_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="defaultv" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
